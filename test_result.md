@@ -270,11 +270,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "MongoDB models and schemas"
-    - "Project CRUD endpoints" 
-    - "Photo management endpoints"
-    - "API service integration"
+    - "Complete user workflow testing"
+    - "Canvas rendering and export" 
+    - "Filter and layout functionality"
     - "Project persistence backend integration"
+    - "Gallery backend integration"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
@@ -282,3 +282,7 @@ test_plan:
 agent_communication:
     - agent: "main"
       message: "Completed backend development with full CRUD API for projects and photos. Integrated frontend with backend API service. Ready for comprehensive backend testing of all endpoints and data persistence."
+    - agent: "testing"
+      message: "Backend testing completed successfully. All API endpoints working correctly. Fixed critical issue with project saving logic. Ready for frontend testing."
+    - agent: "main"
+      message: "Ready for frontend testing. Need to verify complete user workflow, canvas functionality, and UI interactions with backend integration."
