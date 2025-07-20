@@ -16,34 +16,43 @@ const GalleryPage = () => {
     loadProjects();
   }, []);
 
-  const loadProjects = () => {
+  const loadProjects = async () => {
     try {
-      const savedProjects = JSON.parse(localStorage.getItem('snapstyle-projects') || '[]');
-      
-      // If no projects exist, use mock data for demonstration
-      if (savedProjects.length === 0) {
-        setProjects(mockData.savedProjects);
-        localStorage.setItem('snapstyle-projects', JSON.stringify(mockData.savedProjects));
-      } else {
-        setProjects(savedProjects);
-      }
+      const backendProjects = await apiService.getAllProjects();
+      setProjects(backendProjects);
     } catch (error) {
       console.error('Error loading projects:', error);
-      setProjects(mockData.savedProjects);
+      setProjects([]);
+      toast({
+        title: "Loading Failed",
+        description: "Unable to load projects. Please try again.",
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const deleteProject = (projectId) => {
-    const updatedProjects = projects.filter(p => p.id !== projectId);
-    setProjects(updatedProjects);
-    localStorage.setItem('snapstyle-projects', JSON.stringify(updatedProjects));
-    
-    toast({
-      title: "Project Deleted",
-      description: "The project has been removed from your gallery.",
-    });
+  const deleteProject = async (projectId) => {
+    try {
+      await apiService.deleteProject(projectId);
+      setProjects(projects.filter(p => p.id !== projectId));
+      
+      toast({
+        title: "Project Deleted",
+        description: "The project has been removed from your gallery.",
+      });
+    } catch (error) {
+      toast({
+        title: "Delete Failed",
+        description: error.message || "Unable to delete project. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const editProject = (projectId) => {
+    navigate(`/studio?id=${projectId}`);
   };
 
   const formatDate = (dateString) => {
