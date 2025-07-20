@@ -15,29 +15,77 @@ import apiService from '../services/api';
 const StudioPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const canvasRef = useRef(null);
   
   const [currentProject, setCurrentProject] = useState({
-    id: Date.now(),
+    id: Date.now().toString(),
     name: 'Untitled Project',
     photos: [],
     layout: 'strip-4',
     filter: null,
     customization: {
-      borderColor: '#ffffff',
-      backgroundColor: '#ffffff',
+      border_color: '#ffffff',
+      background_color: '#ffffff',
       spacing: 10,
       text: '',
-      textColor: '#000000',
-      textSize: 16,
-      textPosition: 'bottom'
-    },
-    createdAt: new Date().toISOString()
+      text_color: '#000000',
+      text_size: 16,
+      text_position: 'bottom'
+    }
   });
 
   const [history, setHistory] = useState([currentProject]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [activeTab, setActiveTab] = useState('photos');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Load project if projectId is in URL params
+  useEffect(() => {
+    const projectId = searchParams.get('id');
+    if (projectId) {
+      loadProject(projectId);
+    }
+  }, [searchParams]);
+
+  const loadProject = async (projectId) => {
+    try {
+      setIsLoading(true);
+      const project = await apiService.getProject(projectId);
+      
+      // Convert backend format to frontend format
+      const frontendProject = {
+        ...project,
+        customization: {
+          borderColor: project.customization.border_color,
+          backgroundColor: project.customization.background_color,
+          spacing: project.customization.spacing,
+          text: project.customization.text,
+          textColor: project.customization.text_color,
+          textSize: project.customization.text_size,
+          textPosition: project.customization.text_position
+        }
+      };
+      
+      setCurrentProject(frontendProject);
+      setHistory([frontendProject]);
+      setHistoryIndex(0);
+      
+      toast({
+        title: "Project Loaded!",
+        description: `"${project.name}" has been loaded successfully.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Load Failed",
+        description: "Unable to load project. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const saveToHistory = (newProject) => {
     const newHistory = history.slice(0, historyIndex + 1);
