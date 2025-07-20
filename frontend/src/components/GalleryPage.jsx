@@ -153,12 +153,6 @@ const GalleryPage = () => {
                             <div
                               key={index}
                               className="relative overflow-hidden bg-gray-200"
-                              style={{
-                                filter: project.filter ? mockData.filters.vintage.find(f => f.id === project.filter)?.css || 
-                                       mockData.filters.cinematic.find(f => f.id === project.filter)?.css ||
-                                       mockData.filters.modern.find(f => f.id === project.filter)?.css ||
-                                       mockData.filters.artistic.find(f => f.id === project.filter)?.css || 'none' : 'none'
-                              }}
                             >
                               <img
                                 src={photo}
