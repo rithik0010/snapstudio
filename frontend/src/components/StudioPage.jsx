@@ -127,7 +127,18 @@ const StudioPage = () => {
   };
 
   const handleCustomizationChange = (customization) => {
-    const newProject = { ...currentProject, customization: { ...currentProject.customization, ...customization } };
+    // Convert backend format to frontend format for consistency
+    const frontendCustomization = {
+      borderColor: customization.borderColor || customization.border_color || currentProject.customization.borderColor,
+      backgroundColor: customization.backgroundColor || customization.background_color || currentProject.customization.backgroundColor,
+      spacing: customization.spacing !== undefined ? customization.spacing : currentProject.customization.spacing,
+      text: customization.text !== undefined ? customization.text : currentProject.customization.text,
+      textColor: customization.textColor || customization.text_color || currentProject.customization.textColor,
+      textSize: customization.textSize || customization.text_size || currentProject.customization.textSize,
+      textPosition: customization.textPosition || customization.text_position || currentProject.customization.textPosition
+    };
+    
+    const newProject = { ...currentProject, customization: frontendCustomization };
     setCurrentProject(newProject);
     saveToHistory(newProject);
   };
