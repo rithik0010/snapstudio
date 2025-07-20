@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
@@ -10,7 +10,7 @@ import FilterPanel from './FilterPanel';
 import LayoutPanel from './LayoutPanel';
 import CustomizationPanel from './CustomizationPanel';
 import CanvasEditor from './CanvasEditor';
-import { mockData } from '../utils/mockData';
+import apiService from '../services/api';
 
 const StudioPage = () => {
   const navigate = useNavigate();
