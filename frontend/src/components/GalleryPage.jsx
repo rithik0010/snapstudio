@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { ArrowLeft, Camera, Trash2, Edit3, Download, Calendar, Sparkles } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
-import { mockData } from '../utils/mockData';
+import apiService from '../services/api';
 
 const GalleryPage = () => {
   const navigate = useNavigate();
