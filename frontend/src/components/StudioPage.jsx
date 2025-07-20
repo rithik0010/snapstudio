@@ -325,15 +325,26 @@ const StudioPage = () => {
 
           {/* Center Panel - Canvas */}
           <div className="lg:col-span-9">
-            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg h-full">
-              <CardContent className="p-6 h-full">
-                <CanvasEditor
-                  ref={canvasRef}
-                  project={currentProject}
-                  className="w-full h-full"
-                />
-              </CardContent>
-            </Card>
+            {isLoading ? (
+              <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg h-full">
+                <CardContent className="p-6 h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading project...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg h-full">
+                <CardContent className="p-6 h-full">
+                  <CanvasEditor
+                    ref={canvasRef}
+                    project={currentProject}
+                    className="w-full h-full"
+                  />
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
