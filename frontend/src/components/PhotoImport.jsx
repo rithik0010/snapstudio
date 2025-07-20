@@ -16,6 +16,7 @@ const PhotoImport = ({ photos, onPhotosChange }) => {
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
+          // Convert backend format keys to frontend format
           const newPhoto = {
             id: Date.now() + Math.random(),
             url: e.target.result,
