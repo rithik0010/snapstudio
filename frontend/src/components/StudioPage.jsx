@@ -262,10 +262,11 @@ const StudioPage = () => {
               <Button 
                 variant="outline" 
                 onClick={saveProject}
+                disabled={isSaving}
                 className="bg-white hover:bg-gray-50"
               >
                 <Save className="w-4 h-4 mr-2" />
-                Save
+                {isSaving ? 'Saving...' : 'Save'}
               </Button>
               <Button 
                 onClick={exportProject}
