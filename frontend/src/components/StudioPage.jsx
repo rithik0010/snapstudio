@@ -132,18 +132,52 @@ const StudioPage = () => {
     saveToHistory(newProject);
   };
 
-  const saveProject = () => {
+  const saveProject = async () => {
     try {
-      const savedProjects = JSON.parse(localStorage.getItem('snapstyle-projects') || '[]');
-      const existingIndex = savedProjects.findIndex(p => p.id === currentProject.id);
+      setIsSaving(true);
       
-      if (existingIndex >= 0) {
-        savedProjects[existingIndex] = { ...currentProject, updatedAt: new Date().toISOString() };
+      // Convert frontend format to backend format
+      const backendProject = {
+        name: currentProject.name,
+        layout: currentProject.layout,
+        filter: currentProject.filter,
+        customization: {
+          border_color: currentProject.customization.borderColor || currentProject.customization.border_color,
+          background_color: currentProject.customization.backgroundColor || currentProject.customization.background_color,
+          spacing: currentProject.customization.spacing,
+          text: currentProject.customization.text,
+          text_color: currentProject.customization.textColor || currentProject.customization.text_color,
+          text_size: currentProject.customization.textSize || currentProject.customization.text_size,
+          text_position: currentProject.customization.textPosition || currentProject.customization.text_position
+        }
+      };
+
+      // Process photos for backend
+      if (currentProject.photos && currentProject.photos.length > 0) {
+        backendProject.photos = await apiService.processPhotosForUpload(currentProject.photos);
       } else {
-        savedProjects.push({ ...currentProject, updatedAt: new Date().toISOString() });
+        backendProject.photos = [];
       }
+
+      let savedProject;
       
-      localStorage.setItem('snapstyle-projects', JSON.stringify(savedProjects));
+      // Check if this is an existing project (has valid MongoDB ObjectId format)
+      const isExistingProject = currentProject.id && currentProject.id.length > 10;
+      
+      if (isExistingProject) {
+        // Update existing project
+        savedProject = await apiService.updateProject(currentProject.id, backendProject);
+      } else {
+        // Create new project
+        savedProject = await apiService.createProject(backendProject);
+        
+        // Update the current project ID to match the backend
+        const updatedProject = { ...currentProject, id: savedProject.id };
+        setCurrentProject(updatedProject);
+        
+        // Update URL to include project ID
+        window.history.replaceState({}, '', `/studio?id=${savedProject.id}`);
+      }
       
       toast({
         title: "Project Saved!",
@@ -151,10 +185,12 @@ const StudioPage = () => {
       });
     } catch (error) {
       toast({
-        title: "Save Failed",
-        description: "Unable to save project. Please try again.",
+        title: "Save Failed", 
+        description: error.message || "Unable to save project. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setIsSaving(false);
     }
   };
 
