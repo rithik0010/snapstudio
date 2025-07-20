@@ -172,8 +172,9 @@ const StudioPage = () => {
 
       let savedProject;
       
-      // Check if this is an existing project (has valid MongoDB ObjectId format)
-      const isExistingProject = currentProject.id && currentProject.id.length > 10;
+      // Check if this is an existing project (has valid backend ID format)
+      // Backend IDs are UUIDs, frontend temp IDs are timestamps
+      const isExistingProject = currentProject.id && currentProject.id.includes('-');
       
       if (isExistingProject) {
         // Update existing project
