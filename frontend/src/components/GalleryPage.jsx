@@ -215,7 +215,7 @@ const GalleryPage = () => {
                       <div className="flex items-center text-sm text-gray-500 space-x-3">
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-3 h-3" />
-                          <span>{formatDate(project.updatedAt || project.createdAt)}</span>
+                          <span>{formatDate(project.updated_at || project.created_at)}</span>
                         </div>
                         <div className="flex items-center space-x-1">
                           <Camera className="w-3 h-3" />
