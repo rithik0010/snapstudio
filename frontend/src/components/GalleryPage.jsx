@@ -176,10 +176,7 @@ const GalleryPage = () => {
                         <Button
                           size="sm"
                           variant="secondary"
-                          onClick={() => {
-                            // TODO: Load project in studio
-                            navigate('/studio');
-                          }}
+                          onClick={() => editProject(project.id)}
                           className="bg-white/90 hover:bg-white text-gray-900"
                         >
                           <Edit3 className="w-4 h-4" />
